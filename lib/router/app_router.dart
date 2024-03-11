@@ -38,7 +38,7 @@ class AppRouter {
             ),
             ElevatedButton(
               onPressed: () {
-                HomePage.routeName;
+                Navigator.pushNamed(_, HomePage.routeName);
               },
               child: const Text("Back to Home"),
             ),
