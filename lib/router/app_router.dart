@@ -1,6 +1,7 @@
 import 'package:dicoding_restaurant_app/data/models/restaurants.dart';
 import 'package:dicoding_restaurant_app/pages/detail_page.dart';
 import 'package:dicoding_restaurant_app/pages/home_page.dart';
+import 'package:dicoding_restaurant_app/pages/splash_page.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -8,6 +9,8 @@ class AppRouter {
     switch (settings.name) {
       case HomePage.routeName:
         return MaterialPageRoute(builder: (_) => const HomePage());
+      case SplashPage.routeName:
+        return MaterialPageRoute(builder: (_) => const SplashPage());
       case DetailPage.routeName:
         if (settings.arguments != null && settings.arguments is Restaurant) {
           final restaurant = settings.arguments as Restaurant;

@@ -118,7 +118,6 @@ class _HomePageState extends State<HomePage> {
                   itemCount: filteredRestaurants.length,
                   itemBuilder: (context, index) {
                     final restaurant = filteredRestaurants[index];
-
                     return ListRestaurantCardWidget(
                       onPress: () {
                         Navigator.pushNamed(

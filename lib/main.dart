@@ -1,4 +1,4 @@
-import 'package:dicoding_restaurant_app/pages/home_page.dart';
+import 'package:dicoding_restaurant_app/pages/splash_page.dart';
 import 'package:dicoding_restaurant_app/router/app_router.dart';
 import 'package:dicoding_restaurant_app/utils/style.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         textTheme: myTextTheme,
       ),
       onGenerateRoute: AppRouter.generateRoute,
-      initialRoute: HomePage.routeName,
+      initialRoute: SplashPage.routeName,
     );
   }
 }
