@@ -2,8 +2,9 @@ import 'package:dicoding_restaurant_app/data/api/api_service.dart';
 import 'package:dicoding_restaurant_app/data/models/detail_restaurant.dart';
 import 'package:dicoding_restaurant_app/pages/review_page.dart';
 import 'package:dicoding_restaurant_app/provider/detail_restaurant_provider.dart';
-import 'package:dicoding_restaurant_app/utils/internet_connection_helper.dart';
+
 import 'package:dicoding_restaurant_app/utils/style.dart';
+import 'package:dicoding_restaurant_app/widgets/error_indicator_widget.dart';
 
 import 'package:flutter/material.dart';
 
@@ -208,14 +209,18 @@ class _DetailPageState extends State<DetailPage> {
                   ],
                 ),
               );
-            } else if (state.state == ResultState.noData) {
-              return Center(
-                child: Material(
-                  child: Text(state.message),
-                ),
+            } else if (state.state == ResultState.noData ||
+                state.state == ResultState.error) {
+              if (state.message.contains('Failed host lookup')) {
+                return const ErrorIndicator(
+                  errormessage: 'Tidak dapat tersambung dengan internet',
+                );
+              }
+              return const ErrorIndicator(
+                errormessage: 'Data tidak ditemukan',
               );
             } else {
-              throw checkInternetConnection();
+              return const Material(child: Text(''));
             }
           },
         ),

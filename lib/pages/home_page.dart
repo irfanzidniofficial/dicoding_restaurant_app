@@ -1,8 +1,8 @@
 import 'package:dicoding_restaurant_app/pages/detail_page.dart';
 import 'package:dicoding_restaurant_app/provider/search_restaurant_provider.dart';
-import 'package:dicoding_restaurant_app/utils/internet_connection_helper.dart';
 
 import 'package:dicoding_restaurant_app/widgets/custom_sliver_appbar_widget.dart';
+import 'package:dicoding_restaurant_app/widgets/error_indicator_widget.dart';
 
 import 'package:dicoding_restaurant_app/widgets/list_restaurant_card_widget.dart';
 import 'package:dicoding_restaurant_app/widgets/platform_widget.dart';
@@ -51,14 +51,19 @@ class _HomePageState extends State<HomePage> {
             );
           },
         );
-      } else if (state.state == ResultState.noData) {
-        return Center(
-          child: Material(
-            child: Text(state.message),
-          ),
+      } else if (state.state == ResultState.noData ||
+          state.state == ResultState.error) {
+        if (state.message.contains('Failed host lookup')) {
+          return const ErrorIndicator(
+            errormessage: 'Tidak dapat tersambung dengan internet',
+          );
+        }
+
+        return const ErrorIndicator(
+          errormessage: 'Data tidak ditemukan',
         );
       } else {
-        throw buildInternetConnectionCheck();
+        return const Material(child: Text(''));
       }
     });
   }
