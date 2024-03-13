@@ -1,112 +1,103 @@
 import 'dart:convert';
 
-class ListRestaurant {
-  final List<Restaurant> restaurants;
+class RestaurantResult {
+    final bool error;
+    final String message;
+    final int count;
+    final List<Restaurant> restaurants;
 
-  ListRestaurant({
-    required this.restaurants,
-  });
+    RestaurantResult({
+        required this.error,
+        required this.message,
+        required this.count,
+        required this.restaurants,
+    });
 
-  factory ListRestaurant.fromJson(String str) =>
-      ListRestaurant.fromMap(json.decode(str));
+    RestaurantResult copyWith({
+        bool? error,
+        String? message,
+        int? count,
+        List<Restaurant>? restaurants,
+    }) => 
+        RestaurantResult(
+            error: error ?? this.error,
+            message: message ?? this.message,
+            count: count ?? this.count,
+            restaurants: restaurants ?? this.restaurants,
+        );
 
-  String toJson() => json.encode(toMap());
+    factory RestaurantResult.fromJson(String str) => RestaurantResult.fromMap(json.decode(str));
 
-  factory ListRestaurant.fromMap(Map<String, dynamic> json) => ListRestaurant(
-        restaurants: List<Restaurant>.from(
-            json["restaurants"].map((x) => Restaurant.fromMap(x))),
-      );
+    String toJson() => json.encode(toMap());
 
-  Map<String, dynamic> toMap() => {
+    factory RestaurantResult.fromMap(Map<String, dynamic> json) => RestaurantResult(
+        error: json["error"],
+        message: json["message"],
+        count: json["count"],
+        restaurants: List<Restaurant>.from(json["restaurants"].map((x) => Restaurant.fromMap(x))),
+    );
+
+    Map<String, dynamic> toMap() => {
+        "error": error,
+        "message": message,
+        "count": count,
         "restaurants": List<dynamic>.from(restaurants.map((x) => x.toMap())),
-      };
+    };
 }
 
 class Restaurant {
-  final String id;
-  final String name;
-  final String description;
-  final String pictureId;
-  final String city;
-  final double rating;
-  final Menus menus;
+    final String id;
+    final String name;
+    final String description;
+    final String pictureId;
+    final String city;
+    final double rating;
 
-  Restaurant({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.pictureId,
-    required this.city,
-    required this.rating,
-    required this.menus,
-  });
+    Restaurant({
+        required this.id,
+        required this.name,
+        required this.description,
+        required this.pictureId,
+        required this.city,
+        required this.rating,
+    });
 
-  factory Restaurant.fromJson(String str) =>
-      Restaurant.fromMap(json.decode(str));
+    Restaurant copyWith({
+        String? id,
+        String? name,
+        String? description,
+        String? pictureId,
+        String? city,
+        double? rating,
+    }) => 
+        Restaurant(
+            id: id ?? this.id,
+            name: name ?? this.name,
+            description: description ?? this.description,
+            pictureId: pictureId ?? this.pictureId,
+            city: city ?? this.city,
+            rating: rating ?? this.rating,
+        );
 
-  String toJson() => json.encode(toMap());
+    factory Restaurant.fromJson(String str) => Restaurant.fromMap(json.decode(str));
 
-  factory Restaurant.fromMap(Map<String, dynamic> json) => Restaurant(
+    String toJson() => json.encode(toMap());
+
+    factory Restaurant.fromMap(Map<String, dynamic> json) => Restaurant(
         id: json["id"],
         name: json["name"],
         description: json["description"],
         pictureId: json["pictureId"],
         city: json["city"],
         rating: json["rating"]?.toDouble(),
-        menus: Menus.fromMap(json["menus"]),
-      );
+    );
 
-  Map<String, dynamic> toMap() => {
+    Map<String, dynamic> toMap() => {
         "id": id,
         "name": name,
         "description": description,
         "pictureId": pictureId,
         "city": city,
         "rating": rating,
-        "menus": menus.toMap(),
-      };
-}
-
-class Menus {
-  final List<Drink> foods;
-  final List<Drink> drinks;
-
-  Menus({
-    required this.foods,
-    required this.drinks,
-  });
-
-  factory Menus.fromJson(String str) => Menus.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory Menus.fromMap(Map<String, dynamic> json) => Menus(
-        foods: List<Drink>.from(json["foods"].map((x) => Drink.fromMap(x))),
-        drinks: List<Drink>.from(json["drinks"].map((x) => Drink.fromMap(x))),
-      );
-
-  Map<String, dynamic> toMap() => {
-        "foods": List<dynamic>.from(foods.map((x) => x.toMap())),
-        "drinks": List<dynamic>.from(drinks.map((x) => x.toMap())),
-      };
-}
-
-class Drink {
-  final String name;
-
-  Drink({
-    required this.name,
-  });
-
-  factory Drink.fromJson(String str) => Drink.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory Drink.fromMap(Map<String, dynamic> json) => Drink(
-        name: json["name"],
-      );
-
-  Map<String, dynamic> toMap() => {
-        "name": name,
-      };
+    };
 }

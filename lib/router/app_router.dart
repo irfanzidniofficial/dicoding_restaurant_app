@@ -1,5 +1,3 @@
-import 'package:dicoding_restaurant_app/data/models/restaurants.dart';
-import 'package:dicoding_restaurant_app/pages/detail_page.dart';
 import 'package:dicoding_restaurant_app/pages/home_page.dart';
 import 'package:dicoding_restaurant_app/pages/splash_page.dart';
 import 'package:flutter/material.dart';
@@ -11,15 +9,6 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const HomePage());
       case SplashPage.routeName:
         return MaterialPageRoute(builder: (_) => const SplashPage());
-      case DetailPage.routeName:
-        if (settings.arguments != null && settings.arguments is Restaurant) {
-          final restaurant = settings.arguments as Restaurant;
-          return MaterialPageRoute(
-            builder: (_) => DetailPage(restaurant: restaurant),
-          );
-        }
-
-        return _errorRoute();
       default:
         return _errorRoute();
     }
@@ -38,7 +27,10 @@ class AppRouter {
             ),
             ElevatedButton(
               onPressed: () {
-                HomePage.routeName;
+                Navigator.pushNamed(
+                  _,
+                  HomePage.routeName,
+                );
               },
               child: const Text("Back to Home"),
             ),
