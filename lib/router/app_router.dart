@@ -1,4 +1,6 @@
+import 'package:dicoding_restaurant_app/pages/favorite_page.dart';
 import 'package:dicoding_restaurant_app/pages/home_page.dart';
+import 'package:dicoding_restaurant_app/pages/main_page.dart';
 import 'package:dicoding_restaurant_app/pages/splash_page.dart';
 import 'package:flutter/material.dart';
 
@@ -7,8 +9,12 @@ class AppRouter {
     switch (settings.name) {
       case HomePage.routeName:
         return MaterialPageRoute(builder: (_) => const HomePage());
+      case MainPage.routeName:
+        return MaterialPageRoute(builder: (_) => const MainPage());
       case SplashPage.routeName:
         return MaterialPageRoute(builder: (_) => const SplashPage());
+      case FavoritePage.routeName:
+        return MaterialPageRoute(builder: (_) => const FavoritePage());
       default:
         return _errorRoute();
     }

@@ -3,7 +3,7 @@ import 'dart:convert';
 class DetailRestaurantResult {
   final bool error;
   final String message;
-  final Restaurant restaurant;
+  final RestaurantDetail restaurant;
 
   DetailRestaurantResult({
     required this.error,
@@ -14,7 +14,7 @@ class DetailRestaurantResult {
   DetailRestaurantResult copyWith({
     bool? error,
     String? message,
-    Restaurant? restaurant,
+    RestaurantDetail? restaurant,
   }) =>
       DetailRestaurantResult(
         error: error ?? this.error,
@@ -31,7 +31,7 @@ class DetailRestaurantResult {
       DetailRestaurantResult(
         error: json["error"],
         message: json["message"],
-        restaurant: Restaurant.fromMap(json["restaurant"]),
+        restaurant: RestaurantDetail.fromMap(json["restaurant"]),
       );
 
   Map<String, dynamic> toMap() => {
@@ -41,7 +41,7 @@ class DetailRestaurantResult {
       };
 }
 
-class Restaurant {
+class RestaurantDetail {
   final String id;
   final String name;
   final String description;
@@ -53,7 +53,7 @@ class Restaurant {
   final double rating;
   final List<CustomerReview> customerReviews;
 
-  Restaurant({
+  RestaurantDetail({
     required this.id,
     required this.name,
     required this.description,
@@ -66,7 +66,7 @@ class Restaurant {
     required this.customerReviews,
   });
 
-  Restaurant copyWith({
+  RestaurantDetail copyWith({
     String? id,
     String? name,
     String? description,
@@ -78,7 +78,7 @@ class Restaurant {
     double? rating,
     List<CustomerReview>? customerReviews,
   }) =>
-      Restaurant(
+      RestaurantDetail(
         id: id ?? this.id,
         name: name ?? this.name,
         description: description ?? this.description,
@@ -91,12 +91,12 @@ class Restaurant {
         customerReviews: customerReviews ?? this.customerReviews,
       );
 
-  factory Restaurant.fromJson(String str) =>
-      Restaurant.fromMap(json.decode(str));
+  factory RestaurantDetail.fromJson(String str) =>
+      RestaurantDetail.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Restaurant.fromMap(Map<String, dynamic> json) => Restaurant(
+  factory RestaurantDetail.fromMap(Map<String, dynamic> json) => RestaurantDetail(
         id: json["id"],
         name: json["name"],
         description: json["description"],

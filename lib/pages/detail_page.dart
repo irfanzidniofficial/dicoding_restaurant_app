@@ -1,6 +1,8 @@
 import 'package:dicoding_restaurant_app/data/api/api_service.dart';
 import 'package:dicoding_restaurant_app/data/models/detail_restaurant.dart';
+import 'package:dicoding_restaurant_app/data/models/restaurants.dart';
 import 'package:dicoding_restaurant_app/pages/review_page.dart';
+import 'package:dicoding_restaurant_app/provider/database_provider.dart';
 import 'package:dicoding_restaurant_app/provider/detail_restaurant_provider.dart';
 
 import 'package:dicoding_restaurant_app/utils/style.dart';
@@ -24,14 +26,6 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  bool _isFavorited = false;
-
-  void toggleFavorite() {
-    setState(() {
-      _isFavorited = !_isFavorited;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -39,20 +33,23 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isSaved = Provider.of<DatabaseProvider>(context)
+        .saved
+        .any((r) => r.id == widget.restaurantId);
     return ChangeNotifierProvider(
       create: (context) => DetailRestaurantProvider(
         id: widget.restaurantId,
         apiService: ApiService(),
       ),
       child: Scaffold(
-        body: Consumer<DetailRestaurantProvider>(
-          builder: (context, state, _) {
-            if (state.state == ResultState.loading) {
+        body: Consumer2<DetailRestaurantProvider, DatabaseProvider>(
+          builder: (context, detailState, databaseState, _) {
+            if (detailState.state == ResultState.loading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (state.state == ResultState.hasData) {
-              final restaurant = state.result.restaurant;
+            } else if (detailState.state == ResultState.hasData) {
+              final restaurant = detailState.result.restaurant;
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -60,9 +57,9 @@ class _DetailPageState extends State<DetailPage> {
                       children: [
                         Hero(
                           tag:
-                              "https://restaurant-api.dicoding.dev/images/medium/${restaurant.pictureId}",
+                              "${ApiService.baseUrl}images/medium/${restaurant.pictureId}",
                           child: Image.network(
-                            "https://restaurant-api.dicoding.dev/images/medium/${restaurant.pictureId}",
+                            "${ApiService.baseUrl}images/medium/${restaurant.pictureId}",
                           ),
                         ),
                         Padding(
@@ -88,12 +85,25 @@ class _DetailPageState extends State<DetailPage> {
                               CircleAvatar(
                                 backgroundColor: Colors.grey.withOpacity(0.6),
                                 child: IconButton(
-                                  onPressed: toggleFavorite,
+                                  onPressed: () {
+                                    if (isSaved) {
+                                      databaseState
+                                          .removeSaved(widget.restaurantId);
+                                    } else {
+                                      final restaurantToSave = Restaurant(
+                                        id: widget.restaurantId,
+                                        name: restaurant.name,
+                                        description: '',
+                                        pictureId: '',
+                                        city: restaurant.city,
+                                        rating: restaurant.rating,
+                                      );
+                                      databaseState.addSaved(restaurantToSave);
+                                    }
+                                  },
                                   icon: Icon(
                                     Icons.favorite,
-                                    color: _isFavorited
-                                        ? Colors.red
-                                        : Colors.white,
+                                    color: isSaved ? Colors.red : Colors.white,
                                   ),
                                 ),
                               )
@@ -201,7 +211,7 @@ class _DetailPageState extends State<DetailPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    menuWidget(state),
+                    menuWidget(detailState),
                     const SizedBox(
                       height: 10,
                     ),
@@ -209,9 +219,9 @@ class _DetailPageState extends State<DetailPage> {
                   ],
                 ),
               );
-            } else if (state.state == ResultState.noData ||
-                state.state == ResultState.error) {
-              if (state.message.contains('Failed host lookup')) {
+            } else if (detailState.state == ResultState.noData ||
+                detailState.state == ResultState.error) {
+              if (detailState.message.contains('Failed host lookup')) {
                 return const ErrorIndicator(
                   errormessage: 'Tidak dapat tersambung dengan internet',
                 );
@@ -228,7 +238,7 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  Padding reviewWidget(Restaurant restaurant) {
+  Padding reviewWidget(RestaurantDetail restaurant) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,

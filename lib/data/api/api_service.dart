@@ -11,6 +11,8 @@ class ApiService {
   static const String _search = 'search?q=';
   static const String _review = 'review';
 
+  static String get baseUrl => _baseUrl;
+
   Future<RestaurantResult> listRestaurant() async {
     final response = await http.get(Uri.parse("$_baseUrl$_list"));
     if (response.statusCode == 200) {

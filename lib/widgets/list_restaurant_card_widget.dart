@@ -1,12 +1,18 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:dicoding_restaurant_app/data/models/restaurants.dart';
+import 'package:dicoding_restaurant_app/provider/database_provider.dart';
 import 'package:dicoding_restaurant_app/utils/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListRestaurantCardWidget extends StatelessWidget {
   final String name;
   final String address;
   final String image;
   final String star;
+  final String pictureId;
+
+  final String restaurantId;
+
   final Function()? onPress;
 
   const ListRestaurantCardWidget({
@@ -16,10 +22,16 @@ class ListRestaurantCardWidget extends StatelessWidget {
     required this.image,
     required this.star,
     required this.onPress,
+    required this.restaurantId,
+    required this.pictureId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final isSaved = Provider.of<DatabaseProvider>(context)
+        .saved
+        .any((r) => r.id == restaurantId);
+
     return Container(
       margin: const EdgeInsets.symmetric(
         vertical: 6,
@@ -77,6 +89,9 @@ class ListRestaurantCardWidget extends StatelessWidget {
           padding: const EdgeInsets.only(top: 10),
           child: Column(
             children: [
+              const Row(
+                children: [],
+              ),
               Row(
                 children: [
                   Icon(
@@ -110,6 +125,29 @@ class ListRestaurantCardWidget extends StatelessWidget {
                 ],
               )
             ],
+          ),
+        ),
+        trailing: IconButton(
+          onPressed: () {
+            final databaseProvider =
+                Provider.of<DatabaseProvider>(context, listen: false);
+            if (isSaved) {
+              databaseProvider.removeSaved(restaurantId);
+            } else {
+              final restaurant = Restaurant(
+                id: restaurantId,
+                name: name,
+                description: '',
+                pictureId: pictureId,
+                city: address,
+                rating: double.parse(star),
+              );
+              databaseProvider.addSaved(restaurant);
+            }
+          },
+          icon: Icon(
+            isSaved ? Icons.favorite_rounded : Icons.favorite_outline,
+            color: isSaved ? Colors.red : null,
           ),
         ),
       ),

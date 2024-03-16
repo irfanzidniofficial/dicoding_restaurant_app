@@ -1,3 +1,4 @@
+import 'package:dicoding_restaurant_app/data/api/api_service.dart';
 import 'package:dicoding_restaurant_app/pages/detail_page.dart';
 import 'package:dicoding_restaurant_app/provider/search_restaurant_provider.dart';
 
@@ -31,10 +32,12 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (context, index) {
             var restaurant = state.result.restaurants[index];
             return ListRestaurantCardWidget(
+              pictureId: restaurant.pictureId,
               name: restaurant.name,
               address: restaurant.city,
+              restaurantId: restaurant.id,
               image:
-                  "https://restaurant-api.dicoding.dev/images/medium/${restaurant.pictureId}",
+                  "${ApiService.baseUrl}images/medium/${restaurant.pictureId}",
               star: restaurant.rating.toString(),
               onPress: () {
                 Navigator.push(

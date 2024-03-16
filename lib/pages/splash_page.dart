@@ -1,4 +1,5 @@
-import 'package:dicoding_restaurant_app/pages/home_page.dart';
+
+import 'package:dicoding_restaurant_app/pages/main_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -18,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
         ), () {
       Navigator.pushNamed(
         context,
-        HomePage.routeName,
+        MainPage.routeName,
       );
     });
     super.initState();
